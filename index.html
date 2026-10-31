@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="dark">
+<html lang="ko" data-theme="noir">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -12,7 +12,9 @@
   <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
   <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="stylesheet" href="./styles.css">
-  <title>LAW / 175 — Reader Edition</title>
+  <link rel="stylesheet" href="./themes.css">
+  <script>try{const t=localStorage.getItem("law175-visual-theme-v1");if(["noir","notebook","dusk"].includes(t))document.documentElement.dataset.theme=t}catch(e){}</script>
+  <title>LAW / 175 — Three Themes</title>
 </head>
 <body>
 <svg class="svg-icons" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -82,6 +84,15 @@
 <div class="utility-modal" id="utilityModal" role="dialog" aria-modal="true" aria-label="앱 설정" hidden></div>
 <input type="file" id="backupFile" accept=".json,application/json" hidden>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div class="theme-welcome" id="themeWelcome" tabindex="-1" role="dialog" aria-modal="true" aria-label="디자인 테마 선택" hidden>
+  <div class="theme-welcome__ambient" aria-hidden="true"></div>
+  <div class="theme-welcome__panel">
+    <div class="theme-welcome__header"><div class="theme-welcome__brand">LAW<span>/</span>175 <span class="theme-welcome__dot">●</span></div><div class="theme-welcome__step">WELCOME · 01 / 01</div></div>
+    <div class="theme-welcome__intro"><p class="theme-welcome__eyebrow">MAKE IT YOUR STUDY SPACE</p><h1>오늘의 공부 공간을<br><em>골라 볼까요?</em></h1><p class="theme-welcome__subtitle">세 가지 디자인 중 마음에 드는 것을 선택해요.<br>학습 내용과 진도는 모든 테마에서 같아요.</p></div>
+    <div id="welcomeThemeGrid" class="theme-grid" aria-label="학습 화면 디자인 선택"></div>
+    <div class="theme-welcome__actions"><p>설정에서 언제든 다시 바꿀 수 있어요.</p><button class="theme-start" id="startWithTheme" type="button">선택한 테마로 시작하기 <span aria-hidden="true">↗</span></button></div>
+  </div>
+</div>
 <script src="./topics.js"></script>
 <script src="./app.js"></script>
 </body>

@@ -1,6 +1,8 @@
 (() => {
   'use strict';
   const TOPICS = window.LAW_TOPICS || [];
+  const THEME_KEY = 'law175-visual-theme-v1';
+  const THEME_OPTIONS = {noir:{index:'01',name:'Noir',desc:'깊은 밤, 집중하는 시간',tag:'DARK'},notebook:{index:'02',name:'Notebook',desc:'차분한 공책과 손글씨',tag:'PAPER'},dusk:{index:'04',name:'Glass Dusk',desc:'저녁빛이 머무는 서재',tag:'GLASS'}};
   const STORAGE_KEY = 'lawschool175-sprint-2026-v1'; // 이전 버전과 동일한 키: 같은 출처라면 진도 호환
   const $ = id => document.getElementById(id);
   const svg = name => `<svg class="ico" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
@@ -17,6 +19,43 @@
     } catch(e){ return newState(); }
   }
   let state = getState();
+  function storedTheme(){try{const t=localStorage.getItem(THEME_KEY);return THEME_OPTIONS[t]?t:null;}catch(e){return null;}}
+  const initialTheme=storedTheme();
+  let selectedTheme=initialTheme||'noir';
+  function applyTheme(theme, persist=false){
+    if(!THEME_OPTIONS[theme])return;
+    selectedTheme=theme;
+    document.documentElement.dataset.theme=theme;
+    document.documentElement.style.colorScheme=theme==='notebook'?'light':'dark';
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content=theme==='notebook'?'#f4eee3':theme==='dusk'?'#171b32':'#0a1019';
+    if(persist){state.theme=theme;save();try{localStorage.setItem(THEME_KEY,theme)}catch(e){notify('이 브라우저에서는 디자인 저장이 제한될 수 있어요.')}}
+    document.querySelectorAll('[data-theme-option]').forEach(btn=>{
+      const on=btn.dataset.themeOption===theme;
+      btn.classList.toggle('is-selected',on);
+      btn.setAttribute('aria-pressed',String(on));
+    });
+  }
+  function themeGrid(){
+    return `<div class="theme-grid__inner">${Object.entries(THEME_OPTIONS).map(([code,t])=>`<button type="button" data-theme-option="${code}" class="theme-choice theme-choice--${code} ${selectedTheme===code?'is-selected':''}" aria-pressed="${selectedTheme===code}">
+      <span class="theme-choice__copy"><span class="theme-choice__num">${t.index} <span>— ${t.tag}</span></span><span class="theme-choice__name">${t.name}</span><span class="theme-choice__desc">${t.desc}</span><span class="theme-choice__select"><span class="theme-choice__check">✓</span><span class="theme-choice__label">${selectedTheme===code?'선택됨':'미리보기 · 선택'}</span></span></span>
+      <span class="theme-mini" aria-hidden="true"><span class="theme-mini__top"><span>LAW / 175</span><span>004</span></span><span class="theme-mini__paper"><span class="theme-mini__label">사실과 당위</span><span class="theme-mini__question">어떤 기준으로<br>판단할 것인가?</span><span class="theme-mini__line"></span><span class="theme-mini__line short"></span><span class="theme-mini__line"></span></span></span>
+    </button>`).join('')}</div>`;
+  }
+  function showThemeWelcome(){
+    $('welcomeThemeGrid').innerHTML=themeGrid();
+    $('themeWelcome').hidden=false;
+    document.body.classList.add('theme-onboarding');
+    $('themeWelcome').focus({preventScroll:true});
+  }
+  function finishThemeWelcome(){
+    applyTheme(selectedTheme,true);
+    $('themeWelcome').hidden=true;
+    document.body.classList.remove('theme-onboarding');
+    $('settingsBtn').focus({preventScroll:true});
+    notify('선택한 디자인으로 공부를 시작해요.');
+  }
+
   let currentId = validId(+state.lastId) ? +state.lastId : 1;
   let currentView = 'study', mode = 'all', indexFilter = 'all', railFilter = 'all';
   let indexQuery = '', railQuery = '', revealed = false, deepOpen = false, followOpen = false;
@@ -236,6 +275,7 @@
   function renderSettings(){
     const s=stats();
     $('utilityModal').innerHTML=`<div class="modal-top"><div><span class="tiny-overline">PREFERENCES / BACKUP</span><h2>설정 및 학습 기록</h2></div><button class="icon-button" data-modal="close" aria-label="닫기">${svg('close')}</button></div>
+      <div class="settings-themes"><div class="settings-theme-header"><div><strong>읽기 테마</strong><p>색과 종이 질감을 바꿔요. 학습 데이터는 유지됩니다.</p></div><span class="settings-active-theme">${THEME_OPTIONS[selectedTheme].name}</span></div>${themeGrid()}</div>
       <p><strong>${s.graded}개 학습 · ${s.known}개 익힘 · ${s.weak}개 취약</strong><br>진도와 메모는 현재 브라우저에 자동 저장됩니다. 기기 간 자동 동기화는 되지 않습니다.</p>
       <div class="modal-options"><button data-modal="export">${svg('download')} JSON 백업</button><button data-modal="import">${svg('upload')} 백업 불러오기</button><button data-modal="shuffle">${svg('refresh')} ${randomMode?'무작위: 켬':'무작위: 끔'}</button><button data-modal="index">${svg('list')} 전체 목차</button></div>
       <div class="modal-note"><strong>손쉬운 사용법</strong><ul><li>질문 카드를 터치하면 사례 답변과 논거가 나옵니다. 답변 카드 아무 곳이나 터치하면 질문으로 돌아갑니다.</li><li>왼쪽/오른쪽으로 밀면 다음/이전 주제로 이동합니다.</li><li>심화 내용과 꼬리질문 답변은 카드 바로 아래에서 펼칩니다.</li><li>모름 / 애매함 / 익힘을 누르면 저장 후 다음 카드로 넘어갑니다.</li><li>아이폰에서는 Safari 공유 → 홈 화면에 추가로 설치할 수 있습니다.</li></ul></div>
@@ -330,6 +370,20 @@
     else if(b.dataset.dash==='weak')startMode('weak');
     else if(b.dataset.dash==='unseen')startMode('unseen');
   });
+  // Theme selection: shown once, changeable in Settings anytime.
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-theme-option]');
+    if(!btn)return;
+    const inWelcome=!!btn.closest('#themeWelcome');
+    applyTheme(btn.dataset.themeOption,!inWelcome);
+    document.querySelectorAll('.theme-choice__label').forEach(label=>{
+      const card=label.closest('[data-theme-option]');
+      label.textContent=card.dataset.themeOption===selectedTheme?'선택됨':'미리보기 · 선택';
+    });
+    const active=document.querySelector('.settings-active-theme');
+    if(active)active.textContent=THEME_OPTIONS[selectedTheme].name;
+  });
+  $('startWithTheme').addEventListener('click',finishThemeWelcome);
   $('utilityModal').addEventListener('click',e=>{
     const b=e.target.closest('[data-modal]');if(!b)return;
     switch(b.dataset.modal){
@@ -351,6 +405,7 @@
       if(!$('indexSheet').hidden){e.preventDefault();closeIndex();return;}
       if(currentView==='dashboard'){showStudy();return;}
     }
+    if(!$('themeWelcome').hidden)return;
     const tag=e.target.tagName;if(['INPUT','TEXTAREA','SELECT'].includes(tag)||modalType||!$('indexSheet').hidden)return;
     if(e.key==='Enter'&&e.target.closest('.reader-sheet')){e.preventDefault();hideAnswer();return;}
     if(e.key==='ArrowRight'){e.preventDefault();nextTopic(1);}
@@ -406,5 +461,7 @@
     $('studyFlashcard').textContent='학습 데이터가 올바르지 않습니다. 페이지를 다시 업로드해 주세요.';
     return;
   }
+  applyTheme(selectedTheme,false);
   resetCard();renderStudy();
+  if(!initialTheme)showThemeWelcome();
 })();
