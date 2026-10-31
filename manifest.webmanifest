@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "LAW / 175 — Reader Edition",
+  "short_name": "LAW 175",
+  "description": "사례와 해설을 읽으며 175개 로스쿨 면접 쟁점 익히기",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a1019",
+  "theme_color": "#0a1019",
+  "lang": "ko",
+  "icons": [
+    {"src":"./icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"./icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ]
+}
