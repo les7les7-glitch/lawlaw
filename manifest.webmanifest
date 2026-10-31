@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "LAW / 175 — Three Themes",
+  "name": "LAW / 175 — Reading Room",
   "short_name": "LAW 175",
-  "description": "Noir, Notebook, Glass Dusk 테마를 고를 수 있는 175개 로스쿨 면접 카드 학습기",
+  "description": "175개 로스쿨 면접 주제 학습. 문제와 답변이 같은 높이의 카드로 표시되고 심화 설명은 스크롤로 이어집니다.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -285,3 +285,77 @@ body.theme-onboarding{overflow:hidden!important}
 [data-theme="notebook"] .reader-first h2{background:linear-gradient(transparent 64%,rgba(231,185,154,.34) 64%)}
 [data-theme="notebook"] .flash-question{text-shadow:0 1px 0 rgba(255,255,255,.5)}
 [data-theme="dusk"] .reader-sheet{background:radial-gradient(ellipse 85% 65% at 102% 0%,rgba(163,120,159,.12),transparent 70%)}
+
+/* ===== READING ROOM V5: equal-height question and answer, additional material below the fold =====
+   The answer is the primary screen. Supplemental commentary starts after the card,
+   never steals reading space on a standard iPhone viewport. */
+:root {
+  --reading-card-min-height:clamp(510px, calc(100dvh - 250px), 760px);
+}
+.flash-front,
+.reader-sheet {min-height:var(--reading-card-min-height);}
+.study-flashcard.answer-side {border-radius:18px; border-bottom-color:var(--edge);}
+.reader-sheet {
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:0;
+  padding-top:25px;
+  padding-bottom:27px;
+}
+.reader-topline {margin-bottom:10px;flex:none;}
+.reader-section {flex:none;padding:13px 0 14px;}
+.reader-section.reader-first {padding-top:0;padding-bottom:17px;}
+.reader-section:last-child {padding-bottom:0;}
+.reader-section h2 {margin-bottom:7px;}
+.reader-section p {line-height:1.65;}
+.reader-first p.reader-case-answer {line-height:1.65;}
+/* Supplements deliberately live AFTER the full-sized answer card. */
+.extra-area {margin:24px 0 0;gap:0;}
+.reader-disclosures {border:1px solid var(--edge);border-radius:16px;overflow:hidden;}
+.reader-disclosure + .reader-disclosure {border-top:1px solid var(--edge-faint);}
+.reader-disclosure-button {min-height:51px;padding:14px 19px;font-size:13px;}
+.memo-trigger {
+  margin:21px 0 0;
+  padding:15px 17px;
+  min-height:49px;
+  border:1px solid var(--edge);
+  border-radius:13px;
+  font-size:12px;
+}
+.source-note {margin:29px 3px 0;padding:19px 5px 6px;border-top:1px solid var(--edge-faint);line-height:1.76;}
+/* Dark variants remain calm, notebook retains its paper, dusk retains its glass. */
+[data-theme="notebook"] .reader-disclosures {border-color:#d8cbb7;}
+[data-theme="dusk"] .reader-disclosures {border-color:#77708c;}
+@media(max-width:860px) {
+  :root {--reading-card-min-height:max(450px, calc(100dvh - 240px));}
+  .reader-sheet {padding:22px 21px 23px;}
+  .reader-section {padding:11px 0 12px;}
+  .reader-section.reader-first {padding-bottom:13px;}
+  .reader-section p, .reader-first p.reader-case-answer {line-height:1.58;}
+  .reader-disclosure-button {min-height:50px;padding:13px 18px;font-size:13px;}
+  .extra-area {margin-top:24px;}
+  .memo-trigger {min-height:48px;margin-top:19px;padding:13px 15px;}
+  .source-note {margin-top:27px;padding-top:17px;}
+}
+@media(max-width:600px) {
+  :root {--reading-card-min-height:max(440px, calc(100dvh - 240px));}
+  .study-flashcard.answer-side {border-radius:14px;}
+  .reader-sheet {padding:19px 19px 22px;}
+  .reader-topline {margin-bottom:13px;}
+  .reader-section {padding:10px 0 11px;}
+  .reader-section.reader-first {padding-bottom:13px;}
+  .reader-section h2 {margin-bottom:5px;}
+  .reader-section p {font-size:15.2px;line-height:1.59;}
+  .reader-first p.reader-case-answer {font-size:15.6px;line-height:1.59;}
+  .extra-area {margin-top:23px;}
+  .reader-disclosures {border-radius:13px;}
+  .reader-disclosure-button {min-height:51px;padding:13px 17px;}
+  .memo-trigger {margin-top:18px;}
+  .source-note {margin-top:27px;}
+}
+@media(max-width:365px) {
+  .reader-sheet {padding:17px 16px 19px;}
+  .reader-section p {font-size:14.6px;}
+  .reader-first p.reader-case-answer {font-size:15.0px;}
+}

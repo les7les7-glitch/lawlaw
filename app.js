@@ -134,6 +134,8 @@
       </article>`;
     }
     renderExtra();renderDock();
+    // The source note belongs to the below-the-card reading section, not the question face.
+    $('sourceNote').hidden=!revealed;
     $('sourceNote').innerHTML=`<strong>자료 기준 · ${t.vol}권 ${esc(t.vol===1?'기본편':'심화&실전모의편')} ${t.page}쪽부터</strong><br>${t.casePdfPage?'사례는 교재의 문제 페이지(스캔 PDF '+t.casePdfPage+'쪽)에서 상황만 재구성했습니다.':'사례는 주제에 맞춰 새로 만든 가상 연습문제입니다.'} 사례 답변·판단 기준·근거·반론·심화 해설은 학습용 의견 예시이며 저자의 모범답안이 아닙니다. 실제 법령·판례·통계는 별도 확인이 필요합니다.`;
   }
   function renderExtra(){
@@ -278,7 +280,7 @@
       <div class="settings-themes"><div class="settings-theme-header"><div><strong>읽기 테마</strong><p>색과 종이 질감을 바꿔요. 학습 데이터는 유지됩니다.</p></div><span class="settings-active-theme">${THEME_OPTIONS[selectedTheme].name}</span></div>${themeGrid()}</div>
       <p><strong>${s.graded}개 학습 · ${s.known}개 익힘 · ${s.weak}개 취약</strong><br>진도와 메모는 현재 브라우저에 자동 저장됩니다. 기기 간 자동 동기화는 되지 않습니다.</p>
       <div class="modal-options"><button data-modal="export">${svg('download')} JSON 백업</button><button data-modal="import">${svg('upload')} 백업 불러오기</button><button data-modal="shuffle">${svg('refresh')} ${randomMode?'무작위: 켬':'무작위: 끔'}</button><button data-modal="index">${svg('list')} 전체 목차</button></div>
-      <div class="modal-note"><strong>손쉬운 사용법</strong><ul><li>질문 카드를 터치하면 사례 답변과 논거가 나옵니다. 답변 카드 아무 곳이나 터치하면 질문으로 돌아갑니다.</li><li>왼쪽/오른쪽으로 밀면 다음/이전 주제로 이동합니다.</li><li>심화 내용과 꼬리질문 답변은 카드 바로 아래에서 펼칩니다.</li><li>모름 / 애매함 / 익힘을 누르면 저장 후 다음 카드로 넘어갑니다.</li><li>아이폰에서는 Safari 공유 → 홈 화면에 추가로 설치할 수 있습니다.</li></ul></div>
+      <div class="modal-note"><strong>손쉬운 사용법</strong><ul><li>질문 카드를 터치하면 사례 답변과 논거가 나옵니다. 답변 카드 아무 곳이나 터치하면 질문으로 돌아갑니다.</li><li>왼쪽/오른쪽으로 밀면 다음/이전 주제로 이동합니다.</li><li>답변 카드 아래로 스크롤하면 심화 내용·꼬리질문·메모·자료 기준을 볼 수 있습니다.</li><li>모름 / 애매함 / 익힘을 누르면 저장 후 다음 카드로 넘어갑니다.</li><li>아이폰에서는 Safari 공유 → 홈 화면에 추가로 설치할 수 있습니다.</li></ul></div>
       <div class="modal-note"><strong>교재 및 저작권</strong><p>『김종수 로스쿨 면접 200주제』의 목차를 바탕으로 175개 학습 주제명을 구성했습니다. 주제별 질문·핵심·심화·꼬리질문 답변은 별도 작성한 AI 학습자료이며 교재의 모범답안이 아닙니다. 원본 PDF는 포함하지 않습니다.</p></div>
       <button class="modal-danger" data-modal="reset">모든 학습 진도·메모 초기화</button>`;
   }
